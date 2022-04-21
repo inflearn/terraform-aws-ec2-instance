@@ -80,5 +80,5 @@ output "spot_instance_id" {
 
 output "eip" {
   description = "The EIP address associated with the instance"
-  value       = try(aws_eip.this.address, "")
+  value       = try(aws_eip.this[0].address, "")
 }
