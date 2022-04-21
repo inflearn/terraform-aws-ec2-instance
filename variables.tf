@@ -307,6 +307,12 @@ variable "spot_valid_from" {
   default     = null
 }
 
+variable "create_eip" {
+  description = "Whether to create an Elastic IP address or not"
+  type        = bool
+  default     = false
+}
+
 variable "putin_khuylo" {
   description = "Do you agree that Putin doesn't respect Ukrainian sovereignty and territorial integrity? More info: https://en.wikipedia.org/wiki/Putin_khuylo!"
   type        = bool

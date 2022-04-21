@@ -293,3 +293,10 @@ resource "aws_spot_instance_request" "this" {
     "Name" = var.name
   }, var.volume_tags) : null
 }
+
+resource "aws_eip" "this" {
+  count    = var.create_eip ? 1 : 0
+  instance = try(aws_instance.this[0].id, aws_spot_instance_request.this[0].id, "")
+  vpc      = true
+  tags     = merge(var.tags, { Name = var.name })
+}

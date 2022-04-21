@@ -77,3 +77,8 @@ output "spot_instance_id" {
   description = "The Instance ID (if any) that is currently fulfilling the Spot Instance request"
   value       = try(aws_spot_instance_request.this[0].spot_instance_id, "")
 }
+
+output "eip" {
+  description = "The EIP address associated with the instance"
+  value       = try(aws_eip.this.address, "")
+}
