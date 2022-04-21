@@ -4,6 +4,13 @@ locals {
   is_t_instance_type = replace(var.instance_type, "/^t(2|3|3a){1}\\..*$/", "1") == "1" ? true : false
 }
 
+resource "aws_key_pair" "this" {
+  count = local.create && var.public_key != null ? 1 : 0
+
+  key_name   = var.name
+  public_key = var.public_key
+}
+
 resource "aws_instance" "this" {
   count = local.create && !var.create_spot_instance ? 1 : 0
 
@@ -19,7 +26,7 @@ resource "aws_instance" "this" {
   subnet_id              = var.subnet_id
   vpc_security_group_ids = var.vpc_security_group_ids
 
-  key_name             = var.key_name
+  key_name             = coalesce(var.key_name, aws_key_pair.this.key_name)
   monitoring           = var.monitoring
   get_password_data    = var.get_password_data
   iam_instance_profile = var.iam_instance_profile
@@ -33,7 +40,9 @@ resource "aws_instance" "this" {
   ebs_optimized = var.ebs_optimized
 
   dynamic "capacity_reservation_specification" {
-    for_each = var.capacity_reservation_specification != null ? [var.capacity_reservation_specification] : []
+    for_each = var.capacity_reservation_specification != null ? [
+      var.capacity_reservation_specification
+    ] : []
     content {
       capacity_reservation_preference = lookup(capacity_reservation_specification.value, "capacity_reservation_preference", null)
 
@@ -134,7 +143,9 @@ resource "aws_instance" "this" {
   }
 
   tags        = merge({ "Name" = var.name }, var.tags)
-  volume_tags = var.enable_volume_tags ? merge({ "Name" = var.name }, var.volume_tags) : null
+  volume_tags = var.enable_volume_tags ? merge({
+    "Name" = var.name
+  }, var.volume_tags) : null
 }
 
 resource "aws_spot_instance_request" "this" {
@@ -177,7 +188,9 @@ resource "aws_spot_instance_request" "this" {
   # End spot request specific attributes
 
   dynamic "capacity_reservation_specification" {
-    for_each = var.capacity_reservation_specification != null ? [var.capacity_reservation_specification] : []
+    for_each = var.capacity_reservation_specification != null ? [
+      var.capacity_reservation_specification
+    ] : []
     content {
       capacity_reservation_preference = lookup(capacity_reservation_specification.value, "capacity_reservation_preference", null)
 
@@ -276,5 +289,7 @@ resource "aws_spot_instance_request" "this" {
   }
 
   tags        = merge({ "Name" = var.name }, var.tags)
-  volume_tags = var.enable_volume_tags ? merge({ "Name" = var.name }, var.volume_tags) : null
+  volume_tags = var.enable_volume_tags ? merge({
+    "Name" = var.name
+  }, var.volume_tags) : null
 }

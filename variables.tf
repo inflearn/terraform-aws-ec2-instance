@@ -95,7 +95,8 @@ variable "iam_instance_profile" {
 }
 
 variable "instance_initiated_shutdown_behavior" {
-  description = "Shutdown behavior for the instance. Amazon defaults this to stop for EBS-backed instances and terminate for instance-store instances. Cannot be set on instance-store instance" # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html#Using_ChangingInstanceInitiatedShutdownBehavior
+  description = "Shutdown behavior for the instance. Amazon defaults this to stop for EBS-backed instances and terminate for instance-store instances. Cannot be set on instance-store instance"
+  # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/terminating-instances.html#Using_ChangingInstanceInitiatedShutdownBehavior
   type        = string
   default     = null
 }
@@ -120,6 +121,12 @@ variable "ipv6_addresses" {
 
 variable "key_name" {
   description = "Key name of the Key Pair to use for the instance; which can be managed using the `aws_key_pair` resource"
+  type        = string
+  default     = null
+}
+
+variable "public_key" {
+  description = "Public key to use for the instance; which can be managed using the `aws_key_pair` resource"
   type        = string
   default     = null
 }
@@ -233,7 +240,8 @@ variable "timeouts" {
 }
 
 variable "cpu_core_count" {
-  description = "Sets the number of CPU cores for an instance." # This option is only supported on creation of instance type that support CPU Options https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-optimize-cpu.html#cpu-options-supported-instances-values
+  description = "Sets the number of CPU cores for an instance."
+  # This option is only supported on creation of instance type that support CPU Options https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-optimize-cpu.html#cpu-options-supported-instances-values
   type        = number
   default     = null
 }
