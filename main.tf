@@ -26,7 +26,7 @@ resource "aws_instance" "this" {
   subnet_id              = var.subnet_id
   vpc_security_group_ids = var.vpc_security_group_ids
 
-  key_name             = coalesce(var.key_name, aws_key_pair.this.key_name)
+  key_name             = coalesce(var.key_name, try(aws_key_pair.this[0].key_name, null))
   monitoring           = var.monitoring
   get_password_data    = var.get_password_data
   iam_instance_profile = var.iam_instance_profile
