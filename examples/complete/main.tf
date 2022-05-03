@@ -261,7 +261,7 @@ module "ec2_multiple" {
   vpc_security_group_ids = [module.security_group.security_group_id]
 
   enable_volume_tags = false
-  root_block_device  = lookup(each.value, "root_block_device", [])
+  root_block_device  = try(each.value.root_block_device, [])
 
   tags = local.tags
 }
