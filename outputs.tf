@@ -82,3 +82,8 @@ output "eip" {
   description = "The EIP address associated with the instance"
   value       = try(aws_eip.this[0].address, "")
 }
+
+output "eip_public_dns" {
+  description = "The EIP domain associated with the instance"
+  value       = try(aws_eip.this[0].public_dns, "")
+}
