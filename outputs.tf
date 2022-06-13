@@ -78,9 +78,9 @@ output "spot_instance_id" {
   value       = try(aws_spot_instance_request.this[0].spot_instance_id, "")
 }
 
-output "eip" {
+output "eip_public_ip" {
   description = "The EIP address associated with the instance"
-  value       = try(aws_eip.this[0].address, "")
+  value       = try(aws_eip.this[0].public_ip, "")
 }
 
 output "eip_public_dns" {
